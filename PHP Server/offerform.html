@@ -1,0 +1,35 @@
+<html>
+<title>
+Offer Form
+</title>
+
+<body>
+<form action="offerformPHP2.php" method="post" enctype="multipart/form-data>
+Provider ID:<input type="text" name="op_id"><br>
+Title:<input type="text" name="o_title"><br>
+Description:<textarea cols="40" rows="3" name="o_description"></textarea><br>
+Price:<input type="text" name="o_price"><br>
+Discount:<input type="text" name="o_discount"><br>
+Photo:<input type="file" name="file_upload" id="file_upload"><br>
+City:<input type="text" name="o_city"><br>
+Area:<input type="text" name="o_area"><br>
+Address:<textarea cols="40" rows="3" name="o_address"></textarea><br>
+Latitude:<input type="text" name="o_lat"><br>
+Longitude:<input type="text" name="o_long"><br>
+Contact:<input type="text" name="o_contact"><br>
+Category:<select name="o_category">
+<option value="food">Food</option>
+<option value="electronics">Electonics</option>
+<option value="clothing">Clothing</option>
+</select><br>
+Expiry Date <input type="date" name="o_expiry"><br>
+Valid: <select name="o_valid">
+<option value="1">True</option>
+<option value="0">False</option>
+</select><br>
+Link:<input type="text" name="o_link"><br>
+<input type="submit" Value="submit">
+</form>
+
+</body>
+</html>

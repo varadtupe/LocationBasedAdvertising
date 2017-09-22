@@ -1,0 +1,144 @@
+<html>
+<body onLoad="initialize()">
+<form action="offerformPHP3.php" method="post" enctype="multipart/form-data">
+Provider ID:<input type="text" name="op_id"><br>
+Title:<input type="text" name="o_title"><br>
+Description:<textarea cols="40" rows="3" name="o_description"></textarea><br>
+Price:<input type="text" name="o_price"><br>
+Discount:<input type="text" name="o_discount"><br>
+City:<input type="text" name="o_city"><br>
+Area:<input type="text" name="o_area"><br>
+Address:<textarea cols="40" rows="3" name="o_address"></textarea><br>
+  <div id="map_canvas" style="width:50%; height:50%"></div>
+
+  <div id="latlong">
+    <p>Latitude: <input size="20" type="text" id="latbox" name="o_lat" ></p>
+    <p>Longitude: <input size="20" type="text" id="lngbox" name="o_long" ></p>
+  </div>
+Contact:<input type="text" name="o_contact"><br>
+Category:<select name="o_category">
+<option value="food">Food</option>
+<option value="electronics">Electonics</option>
+<option value="clothing">Clothing</option>
+</select><br>
+Expiry Date <input type="date" name="o_expiry"><br>
+Valid: <select name="o_valid">
+<option value="1">True</option>
+<option value="0">False</option>
+</select><br>
+Link:<input type="text" name="o_link"><br>
+    Select image to upload:
+    <input type="file" name="file_upload" id="file_upload">
+    <input type="submit" value="Submit" name="submit">
+	</form>
+</body>
+</html>
+
+<cfoutput>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=#YOUR-GOOGLE-API-KEY#&sensor=false"></script>
+</cfoutput>
+
+<script type="text/javascript">
+//<![CDATA[
+
+    // global "map" variable
+    var map = null;
+    var marker = null;
+
+    // popup window for pin, if in use
+    var infowindow = new google.maps.InfoWindow({ 
+        size: new google.maps.Size(150,50)
+        });
+
+    // A function to create the marker and set up the event window function 
+    function createMarker(latlng, name, html) {
+
+    var contentString = html;
+
+    var marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        zIndex: Math.round(latlng.lat()*-100000)<<5
+        });
+
+    google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(contentString); 
+        infowindow.open(map,marker);
+        });
+
+    google.maps.event.trigger(marker, 'click');    
+    return marker;
+
+}
+
+function initialize() {
+
+    // the location of the initial pin
+    var myLatlng = new google.maps.LatLng(19.0822507,72.8812042);
+
+    // create the map
+    var myOptions = {
+        zoom: 11,
+        center: myLatlng,
+        mapTypeControl: true,
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        navigationControl: true,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+    // establish the initial marker/pin
+    var image = '/images/googlepins/pin2.png';  
+    marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      icon: image,
+      title:"Property Location"
+    });
+
+    // establish the initial div form fields
+    formlat = document.getElementById("latbox").value = myLatlng.lat();
+    formlng = document.getElementById("lngbox").value = myLatlng.lng();
+
+    // close popup window
+    google.maps.event.addListener(map, 'click', function() {
+        infowindow.close();
+        });
+
+    // removing old markers/pins
+    google.maps.event.addListener(map, 'click', function(event) {
+        //call function to create marker
+         if (marker) {
+            marker.setMap(null);
+            marker = null;
+         }
+
+        // Information for popup window if you so chose to have one
+        /*
+         marker = createMarker(event.latLng, "name", "<b>Location</b><br>"+event.latLng);
+        */
+
+        
+        var myLatLng = event.latLng ;
+        /*  
+        var marker = new google.maps.Marker({
+            by removing the 'var' subsquent pin placement removes the old pin icon
+        */
+        marker = new google.maps.Marker({   
+            position: myLatLng,
+            map: map,
+            
+            title:"Property Location"
+        });
+
+        // populate the form fields with lat & lng 
+        formlat = document.getElementById("latbox").value = event.latLng.lat();
+        formlng = document.getElementById("lngbox").value = event.latLng.lng();
+
+    });
+
+}
+//]]>
+
+</script> 
